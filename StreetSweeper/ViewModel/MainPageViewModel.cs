@@ -14,8 +14,7 @@ namespace StreetSweeper.ViewModel
         public static readonly Color DeletedPathItemColor = Color.FromRgb(200, 0, 0);
         public static readonly Color DuplicatePathItemColor = Color.FromRgb(0, 0, 115);
 
-        [ObservableProperty]
-        List<EnvironmentVariableTarget> _environments = Enum.GetValues(typeof(EnvironmentVariableTarget)).Cast<EnvironmentVariableTarget>().ToList();
+        public Array Environments { get; } = Enum.GetValues(typeof(EnvironmentVariableTarget));
 
         EnvironmentVariableTarget _currentEnvironment = EnvironmentVariableTarget.User;
         public EnvironmentVariableTarget CurrentEnvironment
