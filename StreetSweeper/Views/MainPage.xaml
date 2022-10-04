@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StreetSweeper"
+             xmlns:ViewModels="clr-namespace:StreetSweeper.ViewModel"
+             xmlns:Converters="clr-namespace:StreetSweeper.Converters"
+             xmlns:Core="clr-namespace:StreetSweeper.Core;assembly=StreetSweeper.Core"
+             x:Class="StreetSweeper.Views.MainPage"
+             x:DataType="ViewModels:MainPageViewModel"
+             Title="">
+    <ContentPage.BindingContext>
+        <ViewModels:MainPageViewModel />
+    </ContentPage.BindingContext>
+    <StackLayout Margin="5"
+                 Spacing="5">
+        <Picker ItemsSource="{Binding Environments}"
+                SelectedItem="{Binding CurrentEnvironment}"
+                Margin="0,5" />
+        <CollectionView ItemsSource="{Binding Paths}"
+                        SelectionMode="Single"
+                        VerticalOptions="FillAndExpand">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="Core:PathItem">
+                    <Frame Margin="0,0,0,5">
+                        <Frame.BackgroundColor>
+                            <MultiBinding Converter="{Converters:PathItemToColorConverter}">
+                                <Binding />
+                                <Binding Source="{RelativeSource AncestorType={x:Type ViewModels:MainPageViewModel}}"
+                                         Path="DoRemoveDuplicates" />
+                                <Binding Source="{RelativeSource AncestorType={x:Type ViewModels:MainPageViewModel}}"
+                                         Path="DoRemoveDeleted" />
+                            </MultiBinding>
+                        </Frame.BackgroundColor>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="{Binding Path}"
+                                   HorizontalOptions="StartAndExpand" />
+                            <Label VerticalOptions="Center">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{}{0} {1}">
+                                        <Binding Converter="{Converters:PathExistsToStringConverter}" />
+                                        <Binding Converter="{Converters:IsDuplicateToStringConverter}" />
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <HorizontalStackLayout>
+            <CheckBox IsChecked="{Binding DoRemoveDuplicates}" />
+            <Label Grid.Column="1"
+                   Text="Remove duplicates"
+                   VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ToggleAttributeCommand}"
+                                          CommandParameter="DoRemoveDuplicates" />
+                </Label.GestureRecognizers>
+            </Label>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout>
+            <CheckBox Grid.Row="1"
+                      IsChecked="{Binding DoRemoveDeleted}" />
+            <Label Grid.Row="1"
+                   Grid.Column="1"
+                   Text="Remove deleted paths"
+                   VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ToggleAttributeCommand}"
+                                          CommandParameter="DoRemoveDeleted" />
+                </Label.GestureRecognizers>
+            </Label>
+        </HorizontalStackLayout>
+        <Button Text="Apply changes"
+                Command="{Binding ExecuteCommand}" />
+    </StackLayout>
+</ContentPage>

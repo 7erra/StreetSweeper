@@ -1,0 +1,53 @@
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Diagnostics;
+using StreetSweeper.Core;
+using System.Collections.ObjectModel;
+using System.Linq;
+using Microsoft.Maui.Controls.Shapes;
+
+namespace StreetSweeper.ViewModel
+{
+    public partial class MainPageViewModel : ObservableObject
+    {
+        public static readonly Color ValidPathItemColor = Color.FromRgb(20, 20, 20);
+        public static readonly Color DeletedPathItemColor = Color.FromRgb(200, 0, 0);
+        public static readonly Color DuplicatePathItemColor = Color.FromRgb(0, 0, 115);
+
+        [ObservableProperty]
+        List<EnvironmentVariableTarget> _environments = Enum.GetValues(typeof(EnvironmentVariableTarget)).Cast<EnvironmentVariableTarget>().ToList();
+
+        EnvironmentVariableTarget _currentEnvironment = EnvironmentVariableTarget.User;
+        public EnvironmentVariableTarget CurrentEnvironment
+        {
+            get => _currentEnvironment;
+            set
+            {
+                SetProperty(ref _currentEnvironment, value);
+                Paths = new(value);
+            }
+        }
+
+        [ObservableProperty]
+        PathList _paths = new(EnvironmentVariableTarget.Process);
+
+        [ObservableProperty]
+        bool _doRemoveDuplicates, _doRemoveDeleted;
+
+        [RelayCommand]
+        void ToggleAttribute(string attribute)
+        {
+            var property = GetType().GetProperty(attribute, typeof(bool));
+            var currentState = (bool)property.GetValue(this);
+            property.SetValue(this, !currentState, null);
+        }
+
+        [RelayCommand]
+        void Execute()
+        {
+            if (DoRemoveDuplicates) Cleaner.RemoveDuplicates(CurrentEnvironment);
+            if (DoRemoveDeleted) Cleaner.RemoveDeleted(CurrentEnvironment);
+            Paths = new(CurrentEnvironment);
+        }
+    }
+}
