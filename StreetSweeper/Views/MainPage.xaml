@@ -5,6 +5,7 @@
              xmlns:ViewModels="clr-namespace:StreetSweeper.ViewModel"
              xmlns:Converters="clr-namespace:StreetSweeper.Converters"
              xmlns:Core="clr-namespace:StreetSweeper.Core;assembly=StreetSweeper.Core"
+             xmlns:Toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="StreetSweeper.Views.MainPage"
              x:DataType="ViewModels:MainPageViewModel"
              Title="">
@@ -72,7 +73,18 @@
                 </Label.GestureRecognizers>
             </Label>
         </HorizontalStackLayout>
-        <Button Text="Apply changes"
-                Command="{Binding ExecuteCommand}" />
+        <Button Command="{Binding ExecuteCommand}"
+                IsEnabled="{Binding CurrentEnvironment, Converter={Converters:EnvironmentToBoolConverter}}">
+            <Button.Text>
+                <Binding Source="{RelativeSource Self}"
+                         Path="IsEnabled">
+                    <Binding.Converter>
+                        <Toolkit:BoolToObjectConverter x:TypeArguments="x:String"
+                                                       TrueObject="Apply changes"
+                                                       FalseObject="Admin rights required!" />
+                    </Binding.Converter>
+                </Binding>
+            </Button.Text>
+        </Button>
     </StackLayout>
 </ContentPage>

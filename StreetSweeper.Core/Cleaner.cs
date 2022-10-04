@@ -1,4 +1,6 @@
-﻿namespace StreetSweeper.Core
+﻿using System.Security;
+
+namespace StreetSweeper.Core
 {
     public class Cleaner
     {
@@ -13,7 +15,7 @@
         {
             var paths = GetPathAsList(target);
             var existing = paths.Where(x => Directory.Exists(x));
-            Environment.SetEnvironmentVariable("Path", string.Join(';', existing), target);
+            SetPath(string.Join(';', existing), target);
         }
 
         public static List<string> GetNonExistant(EnvironmentVariableTarget target = EnvironmentVariableTarget.User)
@@ -28,7 +30,7 @@
             // Remove duplicates:
             var uniques = paths.Distinct().ToList();
             // Set variable
-            Environment.SetEnvironmentVariable("Path", string.Join(';', uniques), target);
+            SetPath(string.Join(';', uniques), target);
         }
 
         public static List<string> GetDuplicates(EnvironmentVariableTarget target = EnvironmentVariableTarget.User)
@@ -52,7 +54,7 @@
             var target2Paths = GetPathAsList(target2);
             // Remove all paths that are already covered by target1
             var filtered = target2Paths.Where(x => !target1Paths.Contains(x));
-            Environment.SetEnvironmentVariable("Path", string.Join(';', filtered), target2);
+            SetPath(string.Join(';', filtered), target2);
         }
 
         public static void FullClean(EnvironmentVariableTarget target)
@@ -67,6 +69,18 @@
                 RemoveDuplicatesAcrossTargets(EnvironmentVariableTarget.User, target);
             }
             RemoveDeleted(target);
+        }
+
+        public static void SetPath(string value, EnvironmentVariableTarget target)
+        {
+            try
+            {
+                Environment.SetEnvironmentVariable("Path", value, target);
+            }
+            catch (SecurityException)
+            {
+                throw new SecurityException("You need admin rights to modify the $Path variable for all users!");
+            }
         }
     }
 }
