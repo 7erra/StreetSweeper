@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StreetSweeper.Core
+﻿namespace StreetSweeper.Core
 {
     public class PathItem
     {
         string _path;
         public string Path
         {
-            get => _path; 
+            get => _path;
             set => _path = value;
         }
 

@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using StreetSweeper.Core;
 using System.Globalization;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
-using StreetSweeper.Core;
 
 namespace StreetSweeper.Converters
 {

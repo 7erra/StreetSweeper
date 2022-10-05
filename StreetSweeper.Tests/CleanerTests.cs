@@ -1,5 +1,5 @@
-﻿using StreetSweeper.Core;
-using FluentAssertions;
+﻿using FluentAssertions;
+using StreetSweeper.Core;
 
 namespace StreetSweeper.Tests
 {

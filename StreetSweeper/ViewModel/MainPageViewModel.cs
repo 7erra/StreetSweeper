@@ -1,10 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Diagnostics;
 using StreetSweeper.Core;
-using System.Collections.ObjectModel;
-using System.Linq;
-using Microsoft.Maui.Controls.Shapes;
 
 namespace StreetSweeper.ViewModel
 {
