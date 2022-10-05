@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using StreetSweeper.Core;
 
 namespace StreetSweeper.Converters
 {
@@ -17,9 +18,7 @@ namespace StreetSweeper.Converters
 
             if (environment == EnvironmentVariableTarget.Machine)
             {
-                using var identity = WindowsIdentity.GetCurrent();
-                var principal = new WindowsPrincipal(identity);
-                return principal.IsInRole(WindowsBuiltInRole.Administrator);
+                return Tools.IsAdmin();
             }
 
             return true;
