@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using StreetSweeper.Core;
 
-namespace StreetSweeper.Tests
+namespace StreetSweeper.Tests.Core
 {
     [Collection("PathTests")]
     public class PahtItemTests : BaseTest

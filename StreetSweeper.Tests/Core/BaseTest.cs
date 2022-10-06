@@ -1,4 +1,4 @@
-﻿namespace StreetSweeper.Tests
+﻿namespace StreetSweeper.Tests.Core
 {
     public abstract class BaseTest
     {
